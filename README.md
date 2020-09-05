@@ -10,7 +10,13 @@
 | xx/xxxxxx  |  xxxx xxxx xxxxx |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+
+O principal objetivo do projeto é mostrar a resolução de um labirinto usando o bfs. Sendo assim,
+é possível separar o projeto em 3 partes:
+ - Gerar o labirinto
+ - Resolver o labirinto
+ - Mostrar na tela a resolução frame a frame 
+
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
@@ -24,8 +30,9 @@ Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+O projeto baseia-se na simples resolução do labirinto, porém o mesmo busca também
+exibir passo a passo do algoritmo de travessia implementado.
 
-
-
-
+Existe um enunciado que foi criado por um dos membros da dupla para os alunos de estutura
+de dados 1, o mesmo serve de base para compreender como funciona o código que gera o labirinto
+e o que é esperado como solução do labirinto.
