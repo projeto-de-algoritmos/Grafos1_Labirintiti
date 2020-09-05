@@ -1,7 +1,9 @@
 from random import *
 import sys
+print("Digite o tamanho do labirinto: ",end='')
 size = int(input())
 
+print("Digite o ponto de entrada e saida do labirinto separados por 1 espaço: ",end='')
 ini,fim = input().split(" ")
 
 ini = int(ini)
@@ -47,9 +49,9 @@ while ponto!=[fim,size-1]:
 text = ''
 for i in range(size): #printa o caminho correto.
     text +=' '.join(maze[i]) + '\n'
-resp = open('ans.txt','w')
-resp.write(text)
-resp.close()
+#resp = open('ans.txt','w')
+#resp.write(text)
+#resp.close()
 #gerando subcaminhos.
 def olharLados(x,y):
     dx = [0, 0, 1, -1]
@@ -84,6 +86,6 @@ while i < size:
 text = '{}\n{} {}\n'.format(size,ini,fim)
 for i in range(size): #printa o labirinto.
     text +=' '.join(maze[i]) + '\n'
-resp = open('maze.txt','w')
+resp = open('tmp/maze.txt','w')
 resp.write(text)
 resp.close()
