@@ -189,6 +189,9 @@ def main():
     resolution = (800, 600)
     pygame.display.set_caption("aMAZE")
 
+    icon = pygame.image.load('./assets/media/icon.png')
+    pygame.display.set_icon(icon)
+
     newMaze = Maze(resolution)
     newMaze.principal()
 
