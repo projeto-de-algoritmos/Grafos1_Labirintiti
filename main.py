@@ -1,4 +1,6 @@
 import pygame
+import time
+import random
 
 
 colors = (
@@ -11,9 +13,83 @@ class Maze:
         self.resolution = resolution
         self.display = pygame.display.set_mode(self.resolution)
         self.graphVertices = []  # Grid
+        self.exploredVertices = []
+        self.solution = {}
 
     def drawLine(self, color, initalPosition, endPosition):
         pygame.draw.line(self.display, color, initalPosition, endPosition)
+
+    def drawBacktrackingStart(self, vertice, pathWidth):
+        print("Realizando o backtraking...")
+
+        pygame.draw.rect(
+            self.display, colors[2],
+            (vertice[0]+1, vertice[1]+1, pathWidth-2, pathWidth-2), 0
+        )
+        pygame.display.update()
+
+        time.sleep(0.1)
+
+        pygame.draw.rect(
+            self.display, colors[1],
+            (vertice[0]+1, vertice[1]+1, pathWidth-2, pathWidth-2), 0
+        )
+        pygame.display.update()
+
+    def getNeighbor(self, vertice, pathWidth):
+        # Direções
+        directions = {}
+        directions['left'] = (vertice[0] - pathWidth, vertice[1])
+        directions['top'] = (vertice[0], vertice[1] - pathWidth)
+        directions['bottom'] = (vertice[0], vertice[1] + pathWidth)
+        directions['right'] = (vertice[0] + pathWidth, vertice[1])
+
+        options = []
+        for direction, v in directions.items():
+            if v in self.graphVertices and v not in self.exploredVertices:
+                options.append((direction, v))
+
+        neighbor = random.choice(options) if options else None
+
+        if not neighbor:
+            self.drawBacktrackingStart(vertice, pathWidth)
+
+        print("Vizinho encontrado.")
+        return neighbor
+
+    def drawProgress(self, origin, destiny, pathWidth):
+        if destiny[0] == "left":
+            pygame.draw.rect(
+                self.display, colors[1],
+                (
+                    origin[0]-pathWidth+1, origin[1]+1,
+                    2*pathWidth-1, pathWidth-1
+                ), 0
+            )
+            pygame.display.update()
+        if destiny[0] == "right":
+            pygame.draw.rect(
+                self.display, colors[1],
+                (origin[0]+1, origin[1]+1, 2*pathWidth-1, pathWidth-1), 0
+            )
+            pygame.display.update()
+        if destiny[0] == "top":
+            pygame.draw.rect(
+                self.display, colors[1],
+                (
+                    origin[0]+1, origin[1]-pathWidth+1,
+                    pathWidth-1, 2*pathWidth-1
+                ), 0
+            )
+            pygame.display.update()
+        if destiny[0] == "bottom":
+            pygame.draw.rect(
+                self.display, colors[1],
+                (origin[0]+1, origin[1]+1, pathWidth-1, 2*pathWidth-1), 0
+            )
+            pygame.display.update()
+
+        self.solution[(destiny[1])] = origin
 
     def mazeGenerator(self, pathWidth):
         print("Iniciando geração do labirinto...")
@@ -48,6 +124,28 @@ class Maze:
             y = y + pathWidth
 
         pygame.display.update()
+
+        # Utiliza DFS para gerar labirinto
+        print("Iniciando DFS...")
+
+        stack = []
+        for vertice in self.graphVertices:
+            if vertice not in self.exploredVertices:
+                stack.append(vertice)
+                self.exploredVertices.append(vertice)
+                while stack:
+                    time.sleep(0.1)
+                    u = stack[-1]
+                    print("Procurando arestas...")
+                    neighbor = self.getNeighbor(u, pathWidth)
+                    if neighbor:
+                        self.drawProgress(u, neighbor, pathWidth)
+                        self.exploredVertices.append(neighbor[1])
+                        stack.append(neighbor[1])
+                    else:
+                        stack.pop()
+
+        print("Labirinto gerado com sucesso.")
 
     def principal(self):
         pathWidth = 20
