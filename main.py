@@ -4,7 +4,10 @@ import random
 
 
 colors = (
-    (255, 255, 255), (0, 0, 255), (255, 40, 0), (0, 255, 0)
+    (255, 255, 255),  # Branco
+    (0, 0, 255),  # Azul
+    (255, 40, 0),  # Vermelho
+    (0, 255, 0)  # Verde
 )
 
 
@@ -150,7 +153,10 @@ class Maze:
     def drawSolutionStep(self, vertice, pathWidth):
         pygame.draw.rect(
             self.display, colors[3],
-            (vertice[0]+pathWidth/4, vertice[1]+pathWidth/4, pathWidth/2, pathWidth/2), 0
+            (
+                vertice[0]+pathWidth/4, vertice[1]+pathWidth/4,
+                pathWidth/2, pathWidth/2
+            ), 0
         )
         pygame.display.update()
         time.sleep(0.1)
@@ -170,8 +176,11 @@ class Maze:
         self.mazeGenerator(pathWidth)
         self.mazeSolution(pathWidth)
 
-        while True:
-            continue
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
 
 def main():
