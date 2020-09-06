@@ -147,9 +147,28 @@ class Maze:
 
         print("Labirinto gerado com sucesso.")
 
+    def drawSolutionStep(self, vertice, pathWidth):
+        pygame.draw.rect(
+            self.display, colors[3],
+            (vertice[0]+pathWidth/4, vertice[1]+pathWidth/4, pathWidth/2, pathWidth/2), 0
+        )
+        pygame.display.update()
+        time.sleep(0.1)
+
+    def mazeSolution(self, pathWidth):
+        endVertice = (
+            self.resolution[0]-2*pathWidth, self.resolution[1]-2*pathWidth
+        )
+        self.drawSolutionStep(endVertice, pathWidth)
+
+        while endVertice != (pathWidth, pathWidth):
+            endVertice = self.solution[endVertice]
+            self.drawSolutionStep(endVertice, pathWidth)
+
     def principal(self):
         pathWidth = 20
         self.mazeGenerator(pathWidth)
+        self.mazeSolution(pathWidth)
 
         while True:
             continue
