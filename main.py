@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import math
 
 
 colors = (
@@ -21,6 +22,8 @@ class Maze:
         self.graphVertices = []  # Grid
         self.exploredVertices = []
         self.numberSteps = 0
+        self.numberBacktracking = 0
+        self.endNBacktrackingTitleArea_x = 0
         self.solution = {}
 
     def drawLine(self, color, initalPosition, endPosition):
@@ -30,6 +33,7 @@ class Maze:
         print("Realizando o backtraking...")
 
         self.numberSteps = self.numberSteps + 1
+        self.numberBacktracking = self.numberBacktracking + 1
 
         pygame.draw.rect(
             self.display, colors[2],
@@ -105,23 +109,68 @@ class Maze:
 
         self.solution[(destiny[1])] = origin
 
-    def stepCount(self, textFont, endTitleArea_x):
+    def stepCount(self, textFont, endNStepsTitleArea_x, backtraking=0):
         numberStepsText = textFont.render(
             str(self.numberSteps), True, colors[6]
         )
         numberStepsArea = numberStepsText.get_rect()
-
         pygame.draw.rect(
             self.display, colors[0],
-            (endTitleArea_x, 10, numberStepsArea[2], numberStepsArea[3])
+            (endNStepsTitleArea_x, 10, numberStepsArea[2], numberStepsArea[3])
         )
-        pygame.display.update()
 
         numberStepsArea.center = (
-            endTitleArea_x+int(numberStepsArea[2]/2),
+            endNStepsTitleArea_x+int(numberStepsArea[2]/2),
             10+int(numberStepsArea[3]/2)
         )
         self.display.blit(numberStepsText, numberStepsArea)
+
+        digitIncrease = math.log10(self.numberSteps) % 1 == 0.0
+        if backtraking or digitIncrease:
+            if self.numberBacktracking == 1 or digitIncrease:
+                numberBacktrackingTitle = textFont.render(
+                    'Número de Backtracking: ', True, colors[5]
+                )
+                nBacktrackingTitleArea = numberBacktrackingTitle.get_rect()
+
+                endNStepsArea_x = endNStepsTitleArea_x + numberStepsArea[2]
+                pygame.draw.rect(
+                    self.display, colors[0],
+                    (
+                        endNStepsArea_x, 10,
+                        nBacktrackingTitleArea[2]+20, nBacktrackingTitleArea[3]
+                    )
+                )
+
+                nBacktrackingTitleArea.center = (
+                    endNStepsArea_x+20+int(nBacktrackingTitleArea[2]/2),
+                    10+int(nBacktrackingTitleArea[3]/2)
+                )
+
+                self.endNBacktrackingTitleArea_x = (
+                    endNStepsArea_x + 20 + nBacktrackingTitleArea[2]
+                )
+
+                self.display.blit(
+                    numberBacktrackingTitle, nBacktrackingTitleArea
+                )
+
+            numberBacktrackingText = textFont.render(
+                str(self.numberBacktracking), True, colors[5]
+            )
+            numBacktrackingArea = numberBacktrackingText.get_rect()
+            pygame.draw.rect(
+                self.display, colors[0],
+                (
+                    self.endNBacktrackingTitleArea_x, 10,
+                    numBacktrackingArea[2], numBacktrackingArea[3]
+                )
+            )
+            numBacktrackingArea.center = (
+                self.endNBacktrackingTitleArea_x+int(numBacktrackingArea[2]/2),
+                10+int(numBacktrackingArea[3]/2)
+            )
+            self.display.blit(numberBacktrackingText, numBacktrackingArea)
 
         pygame.display.update()
 
@@ -175,7 +224,7 @@ class Maze:
             20+int(numberStepsTitleArea[2]/2),
             10+int(numberStepsTitleArea[3]/2)
         )
-        endTitleArea_x = numberStepsTitleArea[2] + 20
+        endNumberStepsTitleArea_x = numberStepsTitleArea[2] + 20
         self.display.blit(numberStepsTitle, numberStepsTitleArea)
 
         for vertice in self.graphVertices:
@@ -185,15 +234,15 @@ class Maze:
                 while stack:
                     time.sleep(0.1)
                     u = stack[-1]
-                    print("Procurando arestas...")
+                    # print("Procurando arestas...")
                     neighbor = self.getNeighbor(u, pathWidth)
                     if neighbor:
                         self.drawProgress(u, neighbor, pathWidth)
-                        self.stepCount(textFont, endTitleArea_x)
+                        self.stepCount(textFont, endNumberStepsTitleArea_x)
                         self.exploredVertices.append(neighbor[1])
                         stack.append(neighbor[1])
                     else:
-                        self.stepCount(textFont, endTitleArea_x)
+                        self.stepCount(textFont, endNumberStepsTitleArea_x, 1)
                         stack.pop()
 
         print("Labirinto gerado com sucesso.")
@@ -272,7 +321,7 @@ class Maze:
         self.display.blit(generateMazeButtonText, (323, 330+10))
 
     def principal(self):
-        pathWidth = 100
+        pathWidth = 20
 
         running = True
         showInitialPage = True
