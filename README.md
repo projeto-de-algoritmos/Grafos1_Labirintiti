@@ -1,38 +1,65 @@
-# Labirintiti
+# aMaze
 
-**Número da Lista**: X<br>
-**Conteúdo da Disciplina**: XXXXXXXXXX<br>
+**Número da Lista**: 1<br>
+**Conteúdo da Disciplina**: Grafos 1<br>
 
 ## Alunos
-|Matrícula | Aluno |
+| Matrícula | Aluno |
 | -- | -- |
-| 18/0033620 |  Joao Henrique Paulino |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 18/0033620 |  [João Henrique Paulino](https://github.com/JoaoHenrique12) |
+| 17/0013812 |  [Matheus Rodrigues](https://github.com/rjoao) |
 
 ## Sobre 
 
-O principal objetivo do projeto é mostrar a resolução de um labirinto usando o bfs. Sendo assim,
-é possível separar o projeto em 3 partes:
- - Gerar o labirinto
- - Resolver o labirinto
- - Mostrar na tela a resolução frame a frame 
+O objetivo do projeto é possibilitar a visualização da geração de labirintos utilizando o algoritmo de Busca em Profundidade (DFS - Depth First Search).
 
+É possível separar o projeto em:
+ - Geração do labirinto
+    - Visualização das etapas em diferentes velocidades;
+    - Contagem dos passos do algoritmo;
+    - e Contagem dos passos de Backtracking realizados.
+ - Apresentação da solução do labirinto
+    - Visualização em etapas.
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
+### Tela Inicial
+
+### Geração do Labirinto
+
+### Solução do Labirinto
+
 ## Instalação 
+
 **Linguagem**: Python3<br>
-**Framework**: (caso exista)<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
+
+É necessário possuir o sistema de gerenciamento de pacotes **pip3**.
+
+Se não possuir, no Ubuntu, rode o seguinte comando no terminal:
+
+```
+sudo apt-get install python3-pip
+``` 
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+
+No terminal, primeiro instale os requisitos do projeto e depois execute o arquivo principal.
+
+### Instalação dos requisitos
+
+```
+make install
+```
+
+### Execução do projeto
+
+```
+make run
+```
 
 ## Outros 
-O projeto baseia-se na simples resolução do labirinto, porém o mesmo busca também
-exibir passo a passo do algoritmo de travessia implementado.
 
-Existe um enunciado que foi criado por um dos membros da dupla para os alunos de estutura
-de dados 1, o mesmo serve de base para compreender como funciona o código que gera o labirinto
-e o que é esperado como solução do labirinto.
+O [enunciado](./base/enunciado.pdf) foi criado por um dos membros da dupla ([João Henrique](https://github.com/JoaoHenrique12)) para os alunos de Estrutura de Dados 1.
+
+Esse enunciado foi utilizado como base para o desenvolvimento desse projeto.
