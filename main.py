@@ -11,7 +11,12 @@ colors = (
     (0, 255, 0),  # Verde
     (0, 0, 0),  # Preto
     (139, 0, 0),  # Vermelho Escuro
-    (0, 0, 139)  # Azul Escuro
+    (0, 0, 139),  # Azul Escuro
+    (192, 192, 192),  # Prata
+    (128, 128, 128),  # Cinza
+    (255, 215, 0),  # Ouro
+    (240, 230, 140),  # Amarelo Khaki
+
 )
 
 
@@ -19,11 +24,24 @@ class Maze:
     def __init__(self, resolution, display):
         self.resolution = resolution
         self.display = display
+
         self.graphVertices = []  # Grid
         self.exploredVertices = []
+
         self.numberSteps = 0
         self.numberBacktracking = 0
         self.endNBacktrackingTitleArea_x = 0
+
+        self.qStart_X = 0
+        self.qStart_Y = 0
+        self.qText_W = 0
+        self.qText_H = 0
+
+        self.gStart_X = 0
+        self.gStart_Y = 0
+        self.gText_W = 0
+        self.gText_H = 0
+
         self.solution = {}
 
     def drawLine(self, color, initalPosition, endPosition):
@@ -143,8 +161,8 @@ class Maze:
                 )
 
                 nBacktrackingTitleArea.center = (
-                    endNStepsArea_x+20+int(nBacktrackingTitleArea[2]/2),
-                    10+int(nBacktrackingTitleArea[3]/2)
+                    endNStepsArea_x + 20 + int(nBacktrackingTitleArea[2]/2),
+                    10 + int(nBacktrackingTitleArea[3]/2)
                 )
 
                 self.endNBacktrackingTitleArea_x = (
@@ -227,6 +245,27 @@ class Maze:
         endNumberStepsTitleArea_x = numberStepsTitleArea[2] + 20
         self.display.blit(numberStepsTitle, numberStepsTitleArea)
 
+        # increaseSpeedButton = textFont.render('+SPEED', True, colors[0])
+        # print(increaseSpeedButton.get_height())
+
+        # mouse = pygame.mouse.get_pos()
+
+        # increaseSpeedButtonStart = (
+        #    self.resolution[0] - increaseSpeedButton.get_width() - 20
+        # )
+        # if not (
+        #    increaseSpeedButtonStart <= mouse[0] <= self.resolution[0] - 20
+        #    and 5 <= mouse[1] <= 15
+        # ):
+        #    pygame.draw.rect(
+        #        self.display, colors[7],
+        #        (increaseSpeedButtonStart, 10,
+        #           increaseSpeedButton.get_width(), 20)
+        #    )
+
+        # self.display.blit(increaseSpeedButton, (360, 10))
+        # pygame.display.update()
+
         for vertice in self.graphVertices:
             if vertice not in self.exploredVertices:
                 stack.append(vertice)
@@ -275,55 +314,106 @@ class Maze:
 
     def initialPage(self):
         icon = pygame.image.load('./assets/media/icon.png')
+        self.display.blit(
+            icon, (int(self.resolution[0]/2 - icon.get_width()/2), 40)
+        )
 
         titleFont = pygame.font.Font('./assets/fonts/Roboto-Bold.ttf', 40)
         title = titleFont.render('aMaze', True, colors[0])
         titleArea = title.get_rect()
         titleArea.center = (
-            int(self.resolution[0]/2), 280
+            int(self.resolution[0]/2),
+            int(title.get_height()/2) + icon.get_height() + 40 + 20
         )
+        self.display.blit(title, titleArea)
 
         buttonsTextFont = pygame.font.Font(
             './assets/fonts/Roboto-Bold.ttf', 20
         )
         quitButtonText = buttonsTextFont.render('SAIR', True, colors[0])
+        quitButtonText_W = quitButtonText.get_width()
+        self.qText_W = quitButtonText_W
+
+        quitButtonText_H = quitButtonText.get_height()
+        self.qText_H = quitButtonText_H
 
         mouse = pygame.mouse.get_pos()
 
-        quitButtonStart = int(self.resolution[0]/2) - 40
+        quitStart_X = (
+            int(self.resolution[0]/2 - quitButtonText_W/2 - 10)
+        )
+        self.qStart_X = quitStart_X
+
+        quitStart_Y = (
+            self.resolution[1] - 20 - quitButtonText_H - 20
+        )
+        self.qStart_Y = quitStart_Y
+
         if (
-            quitButtonStart <= mouse[0] <= quitButtonStart+80
-            and 520 <= mouse[1] <= 520+40
+            quitStart_X <= mouse[0] <= quitStart_X + quitButtonText_W + 20
+            and quitStart_Y <= mouse[1] <= quitStart_Y + quitButtonText_H + 20
         ):
             pygame.draw.rect(
-                self.display, colors[5], (quitButtonStart, 520, 80, 40)
+                self.display, colors[5],
+                (
+                    quitStart_X, quitStart_Y,
+                    quitButtonText_W + 20, quitButtonText_H + 20
+                )
             )
         else:
             pygame.draw.rect(
-                self.display, colors[2], (quitButtonStart, 520, 80, 40)
+                self.display, colors[2],
+                (
+                    quitStart_X, quitStart_Y,
+                    quitButtonText_W + 20, quitButtonText_H + 20
+                )
             )
+
+        self.display.blit(quitButtonText, (quitStart_X + 10, quitStart_Y + 10))
 
         generateMazeButtonText = buttonsTextFont.render(
             'GERAR LABIRINTO', True, colors[0]
         )
+        gButtonText_W = generateMazeButtonText.get_width()
+        self.gText_W = gButtonText_W
 
-        gMazeButtonStart = int(self.resolution[0]/2) - 150
+        gButtonText_H = generateMazeButtonText.get_height()
+        self.gText_H = gButtonText_H
+
+        gButtonStart_X = int(
+            self.resolution[0]/2 - gButtonText_W/2 - 10
+        )
+        self.gStart_X = gButtonStart_X
+
+        gButtonStart_Y = (
+            40 + icon.get_height() + 20 + title.get_height() + 20
+        )
+        self.gStart_Y = gButtonStart_Y
+
         if (
-            gMazeButtonStart <= mouse[0] <= gMazeButtonStart+300
-            and 330 <= mouse[1] <= 330+40
+            gButtonStart_X <= mouse[0] <= gButtonStart_X + gButtonText_W + 20
+            and
+            gButtonStart_Y <= mouse[1] <= gButtonStart_Y + gButtonText_H + 20
         ):
             pygame.draw.rect(
-                self.display, colors[6], (gMazeButtonStart, 330, 300, 40)
+                self.display, colors[6],
+                (
+                    gButtonStart_X, gButtonStart_Y,
+                    gButtonText_W + 20, gButtonText_H + 20
+                )
             )
         else:
             pygame.draw.rect(
-                self.display, colors[1], (gMazeButtonStart, 330, 300, 40)
+                self.display, colors[1],
+                (
+                    gButtonStart_X, gButtonStart_Y,
+                    gButtonText_W + 20, gButtonText_H + 20
+                )
             )
 
-        self.display.blit(icon, (int(self.resolution[0]/2) - 100, 40))
-        self.display.blit(title, titleArea)
-        self.display.blit(quitButtonText, (378, 520+10))
-        self.display.blit(generateMazeButtonText, (323, 330+10))
+        self.display.blit(
+            generateMazeButtonText, (gButtonStart_X + 10, gButtonStart_Y + 10)
+        )
 
     def principal(self):
         pathWidth = 20
@@ -342,26 +432,33 @@ class Maze:
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse = pygame.mouse.get_pos()
-                    quitButtonStart = int(self.resolution[0]/2) - 40
-                    if (
-                        quitButtonStart <= mouse[0] <= quitButtonStart+80
-                        and 520 <= mouse[1] <= 520+40
-                    ):
-                        running = False
 
-                    gMazeButtonStart = int(self.resolution[0]/2) - 150
-                    if (
-                        gMazeButtonStart <= mouse[0] <= gMazeButtonStart+300
-                        and 330 <= mouse[1] <= 330+40
-                    ):
-                        self.display.fill(colors[0])
-                        pygame.display.update()
-                        r = self.mazeGenerator(pathWidth)
-                        if r:
+                    if showInitialPage:
+                        qStart_X, qStart_Y = self.qStart_X, self.qStart_Y
+                        qText_W, qText_H = self.qText_W, self.qText_H
+                        if (
+                            qStart_X <= mouse[0] <= qStart_X + qText_W + 20
+                            and qStart_Y <= mouse[1] <= qStart_Y + qText_H + 20
+                        ):
                             running = False
-                        else:
-                            self.mazeSolution(pathWidth)
-                            time.sleep(0.5)
+
+                        gStart_X, gStart_Y = self.gStart_X, self.gStart_Y
+                        gText_W, gText_H = self.gText_W, self.gText_H
+                        if (
+                            gStart_X <= mouse[0] <= gStart_X + gText_W + 20
+                            and gStart_Y <= mouse[1] <= gStart_Y + gText_H + 20
+                        ):
+                            ####
+                            self.display.fill(colors[0])
+
+                            pygame.display.update()
+
+                            r = self.mazeGenerator(pathWidth)
+                            if r:
+                                running = False
+                            else:
+                                self.mazeSolution(pathWidth)
+                                time.sleep(0.5)
 
             pygame.display.update()
 
