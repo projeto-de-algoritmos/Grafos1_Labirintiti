@@ -234,7 +234,7 @@ class Maze:
                 while stack:
                     time.sleep(0.1)
                     u = stack[-1]
-                    # print("Procurando arestas...")
+                    print("Procurando arestas...")
                     neighbor = self.getNeighbor(u, pathWidth)
                     if neighbor:
                         self.drawProgress(u, neighbor, pathWidth)
