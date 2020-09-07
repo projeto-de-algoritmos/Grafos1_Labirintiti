@@ -20,6 +20,7 @@ class Maze:
         self.display = display
         self.graphVertices = []  # Grid
         self.exploredVertices = []
+        self.numberSteps = 0
         self.solution = {}
 
     def drawLine(self, color, initalPosition, endPosition):
@@ -27,6 +28,8 @@ class Maze:
 
     def drawBacktrackingStart(self, vertice, pathWidth):
         print("Realizando o backtraking...")
+
+        self.numberSteps = self.numberSteps + 1
 
         pygame.draw.rect(
             self.display, colors[2],
@@ -64,6 +67,8 @@ class Maze:
         return neighbor
 
     def drawProgress(self, origin, destiny, pathWidth):
+        self.numberSteps = self.numberSteps + 1
+
         if destiny[0] == "left":
             pygame.draw.rect(
                 self.display, colors[1],
@@ -73,12 +78,14 @@ class Maze:
                 ), 0
             )
             pygame.display.update()
+
         if destiny[0] == "right":
             pygame.draw.rect(
                 self.display, colors[1],
                 (origin[0]+1, origin[1]+1, 2*pathWidth-1, pathWidth-1), 0
             )
             pygame.display.update()
+
         if destiny[0] == "top":
             pygame.draw.rect(
                 self.display, colors[1],
@@ -88,6 +95,7 @@ class Maze:
                 ), 0
             )
             pygame.display.update()
+
         if destiny[0] == "bottom":
             pygame.draw.rect(
                 self.display, colors[1],
@@ -97,14 +105,35 @@ class Maze:
 
         self.solution[(destiny[1])] = origin
 
+    def stepCount(self, textFont, endTitleArea_x):
+        numberStepsText = textFont.render(
+            str(self.numberSteps), True, colors[6]
+        )
+        numberStepsArea = numberStepsText.get_rect()
+
+        pygame.draw.rect(
+            self.display, colors[0],
+            (endTitleArea_x, 10, numberStepsArea[2], numberStepsArea[3])
+        )
+        pygame.display.update()
+
+        numberStepsArea.center = (
+            endTitleArea_x+int(numberStepsArea[2]/2),
+            10+int(numberStepsArea[3]/2)
+        )
+        self.display.blit(numberStepsText, numberStepsArea)
+
+        pygame.display.update()
+
     def mazeGenerator(self, pathWidth):
         print("Iniciando geração do labirinto...")
         print("Construindo grafo...")
 
         # Pontos iniciais
-        x, y, w = pathWidth, pathWidth, pathWidth
+        x, y, w = pathWidth, pathWidth+20, pathWidth
+
         limit_x = int(self.resolution[0]/pathWidth)
-        limit_y = int(self.resolution[1]/pathWidth)
+        limit_y = int((self.resolution[1]-20)/pathWidth)
 
         for j in range(1, limit_y-1):
             x = pathWidth
@@ -127,6 +156,7 @@ class Maze:
                 self.graphVertices.append((x, y))
 
                 x = x + pathWidth
+
             y = y + pathWidth
 
         pygame.display.update()
@@ -135,6 +165,19 @@ class Maze:
         print("Iniciando DFS...")
 
         stack = []
+
+        textFont = pygame.font.Font('./assets/fonts/Roboto-Bold.ttf', 17)
+        numberStepsTitle = textFont.render(
+            'Número de Passos: ', True, colors[6]
+        )
+        numberStepsTitleArea = numberStepsTitle.get_rect()
+        numberStepsTitleArea.center = (
+            20+int(numberStepsTitleArea[2]/2),
+            10+int(numberStepsTitleArea[3]/2)
+        )
+        endTitleArea_x = numberStepsTitleArea[2] + 20
+        self.display.blit(numberStepsTitle, numberStepsTitleArea)
+
         for vertice in self.graphVertices:
             if vertice not in self.exploredVertices:
                 stack.append(vertice)
@@ -146,9 +189,11 @@ class Maze:
                     neighbor = self.getNeighbor(u, pathWidth)
                     if neighbor:
                         self.drawProgress(u, neighbor, pathWidth)
+                        self.stepCount(textFont, endTitleArea_x)
                         self.exploredVertices.append(neighbor[1])
                         stack.append(neighbor[1])
                     else:
+                        self.stepCount(textFont, endTitleArea_x)
                         stack.pop()
 
         print("Labirinto gerado com sucesso.")
@@ -170,7 +215,7 @@ class Maze:
         )
         self.drawSolutionStep(endVertice, pathWidth)
 
-        while endVertice != (pathWidth, pathWidth):
+        while endVertice != (pathWidth, pathWidth+20):
             endVertice = self.solution[endVertice]
             self.drawSolutionStep(endVertice, pathWidth)
 
@@ -184,10 +229,13 @@ class Maze:
             int(self.resolution[0]/2), 280
         )
 
-        buttonsTextFont = pygame.font.Font('./assets/fonts/Roboto-Bold.ttf', 20)
+        buttonsTextFont = pygame.font.Font(
+            './assets/fonts/Roboto-Bold.ttf', 20
+        )
         quitButtonText = buttonsTextFont.render('SAIR', True, colors[0])
 
         mouse = pygame.mouse.get_pos()
+
         quitButtonStart = int(self.resolution[0]/2) - 40
         if (
             quitButtonStart <= mouse[0] <= quitButtonStart+80
@@ -224,7 +272,7 @@ class Maze:
         self.display.blit(generateMazeButtonText, (323, 330+10))
 
     def principal(self):
-        pathWidth = 20
+        pathWidth = 100
 
         running = True
         showInitialPage = True
@@ -264,14 +312,14 @@ class Maze:
 def main():
     pygame.init()
 
-    resolution = (800, 600)
-    pygame.display.set_caption("aMAZE")
+    resolution = (800, 620)
+
+    pygame.display.set_caption("aMaze")
 
     icon = pygame.image.load('./assets/media/icon.png')
     pygame.display.set_icon(icon)
 
     display = pygame.display.set_mode(resolution)
-
     newMaze = Maze(resolution, display)
     newMaze.principal()
 
