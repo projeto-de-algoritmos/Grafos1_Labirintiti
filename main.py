@@ -245,7 +245,12 @@ class Maze:
                         self.stepCount(textFont, endNumberStepsTitleArea_x, 1)
                         stack.pop()
 
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            return -1
+
         print("Labirinto gerado com sucesso.")
+        return 0
 
     def drawSolutionStep(self, vertice, pathWidth):
         pygame.draw.rect(
@@ -351,9 +356,12 @@ class Maze:
                     ):
                         self.display.fill(colors[0])
                         pygame.display.update()
-                        self.mazeGenerator(pathWidth)
-                        self.mazeSolution(pathWidth)
-                        time.sleep(0.5)
+                        r = self.mazeGenerator(pathWidth)
+                        if r:
+                            running = False
+                        else:
+                            self.mazeSolution(pathWidth)
+                            time.sleep(0.5)
 
             pygame.display.update()
 
