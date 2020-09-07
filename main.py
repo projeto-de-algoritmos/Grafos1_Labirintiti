@@ -184,7 +184,7 @@ class Maze:
             int(self.resolution[0]/2), 280
         )
 
-        buttonsTextFont = pygame.font.Font('Roboto-Bold.ttf', 20)
+        buttonsTextFont = pygame.font.Font('./assets/fonts/Roboto-Bold.ttf', 20)
         quitButtonText = buttonsTextFont.render('SAIR', True, colors[0])
 
         mouse = pygame.mouse.get_pos()
