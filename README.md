@@ -13,6 +13,8 @@
 
 O objetivo do projeto é possibilitar a visualização da geração de labirintos utilizando o algoritmo de Busca em Profundidade (DFS - Depth First Search).
 
+O algoritmo é aplicado sobre o grafo abstraído do grid da tela. Nesse grafo, cada componente do grid é um vértice e os componentes ao lado (direito e esquerdo), acima e abaixo, se existirem, são os vértices vizinhos. A parede do labirinto representa os componentes que, após a aplicação do algoritmo, não possuem conexão.
+
 É possível separar o projeto em:
  - Geração do labirinto
     - Visualização das etapas em diferentes velocidades;
