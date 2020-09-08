@@ -25,8 +25,10 @@ O objetivo do projeto é possibilitar a visualização da geração de labirinto
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
 ### Tela Inicial
+![Tela Inicial](./assets/media/initial_page.png)
 
 ### Geração do Labirinto
+![Geração do Labirinto](./assets/media/gen_maze.png)
 
 ### Solução do Labirinto
 
