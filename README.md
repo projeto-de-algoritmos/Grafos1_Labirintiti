@@ -33,6 +33,11 @@ Adicione 3 ou mais screenshots do projeto em funcionamento.
 ### Solução do Labirinto
 ![Solução do Labirinto](./assets/media/solution.png)
 
+## Vídeo
+![Vídeo](./assets/media/video.gif)
+
+**[Versão MP4](./assets/media/video.mp4)** 
+
 ## Instalação 
 
 **Linguagem**: Python3<br>
