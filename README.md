@@ -31,6 +31,7 @@ Adicione 3 ou mais screenshots do projeto em funcionamento.
 ![Geração do Labirinto](./assets/media/gen_maze.png)
 
 ### Solução do Labirinto
+![Solução do Labirinto](./assets/media/solution.png)
 
 ## Instalação 
 

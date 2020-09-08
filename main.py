@@ -56,6 +56,8 @@ class Maze:
 
         self.solution = {}
 
+        self.speedStartArea_X = 0
+
     def drawLine(self, color, initalPosition, endPosition):
         pygame.draw.line(self.display, color, initalPosition, endPosition)
 
@@ -311,6 +313,11 @@ class Maze:
             iedButtonsArea - 20 - int(speedTitleNormal.get_width()/2),
             10 + int(speedTitleNormal.get_height()/2) + 3
         )
+
+        self.speedStartArea_X = (
+            iedButtonsArea - 20 - int(speedTitleNormal.get_width())
+        )
+
         self.display.blit(speedTitle, speedTitleArea)
 
     def mazeGenerator(self, pathWidth):
@@ -441,6 +448,15 @@ class Maze:
 
     def mazeSolution(self, pathWidth):
         print("Apresentando solução...")
+
+        pygame.draw.rect(
+            self.display, colors[0],
+            (
+                self.speedStartArea_X, 10,
+                self.resolution[0] - self.speedStartArea_X, 23
+            )
+        )
+
         endVertice = (
             self.resolution[0]-2*pathWidth, self.resolution[1]-2*pathWidth
         )
@@ -454,6 +470,7 @@ class Maze:
                 if event.type == pygame.QUIT:
                     return -1
 
+        print("Solução apresentada com sucesso.")
         return 0
 
     def initialPage(self):
@@ -610,6 +627,7 @@ class Maze:
                             self.dText_W, self.dText_H = 0, 0
                             self.genDelay = ('Normal', 0.1)
                             self.solution = {}
+                            self.speedStartArea_X = 0
 
                             r = self.mazeGenerator(pathWidth)
                             if r:
@@ -620,6 +638,7 @@ class Maze:
                                     running = False
                                 else:
                                     time.sleep(1)
+                                    print("Voltando para a tela inicial...")
 
             pygame.display.update()
 
