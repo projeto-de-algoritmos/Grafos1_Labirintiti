@@ -16,7 +16,7 @@ colors = (
     (255, 69, 0),  # Laranja Avermelhado
     (255, 215, 0),  # Ouro
     (240, 230, 140),  # Amarelo Khaki
-
+    (255, 165, 0)  # Laranja
 )
 
 
@@ -143,6 +143,7 @@ class Maze:
         numberStepsText = textFont.render(
             str(self.numberSteps), True, colors[6]
         )
+        ###
         numberStepsArea = numberStepsText.get_rect()
         pygame.draw.rect(
             self.display, colors[0],
@@ -289,6 +290,29 @@ class Maze:
             decreaseSpeedButtonText, (dButtonStart_X + 20, dButtonStart_Y + 2)
         )
 
+        speedTitle = textFont.render(
+            self.genDelay[0], True, colors[11]
+        )
+        speedTitleNormal = textFont.render(
+            'Normal', True, colors[4]
+        )
+        iedButtonsArea = (
+            self.resolution[0] - 20 - iButtonText_W - 40 - dButtonText_W - 40
+        )
+        speedTitleArea = speedTitle.get_rect()
+        pygame.draw.rect(
+            self.display, colors[0],
+            (
+                iedButtonsArea-20-int(speedTitleNormal.get_width()), 10,
+                speedTitleNormal.get_width(), speedTitleNormal.get_height()
+            )
+        )
+        speedTitleArea.center = (
+            iedButtonsArea - 20 - int(speedTitleNormal.get_width()/2),
+            10 + int(speedTitleNormal.get_height()/2) + 3
+        )
+        self.display.blit(speedTitle, speedTitleArea)
+
     def mazeGenerator(self, pathWidth):
         print("Iniciando geração do labirinto...")
         print("Construindo grafo...")
@@ -413,9 +437,10 @@ class Maze:
             ), 0
         )
         pygame.display.update()
-        time.sleep(0.1)
+        time.sleep(0.05)
 
     def mazeSolution(self, pathWidth):
+        print("Apresentando solução...")
         endVertice = (
             self.resolution[0]-2*pathWidth, self.resolution[1]-2*pathWidth
         )
@@ -424,6 +449,12 @@ class Maze:
         while endVertice != (pathWidth, pathWidth+20):
             endVertice = self.solution[endVertice]
             self.drawSolutionStep(endVertice, pathWidth)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return -1
+
+        return 0
 
     def initialPage(self):
         icon = pygame.image.load('./assets/media/icon.png')
@@ -566,12 +597,29 @@ class Maze:
 
                             pygame.display.update()
 
+                            self.graphVertices, self.exploredVertices = [], []
+                            self.numberSteps, self.numberBacktracking = 0, 0
+                            self.endNBacktrackingTitleArea_x = 0
+                            self.qStart_X, self.qStart_Y = 0, 0
+                            self.qText_W, self.qText_H = 0, 0
+                            self.gStart_X, self.gStart_Y = 0, 0
+                            self.gText_W, self.gText_H = 0, 0
+                            self.iStart_X, self.iStart_Y = 0, 0
+                            self.iText_W, self.iText_H = 0, 0
+                            self.dStart_X, self.dStart_Y = 0, 0
+                            self.dText_W, self.dText_H = 0, 0
+                            self.genDelay = ('Normal', 0.1)
+                            self.solution = {}
+
                             r = self.mazeGenerator(pathWidth)
                             if r:
                                 running = False
                             else:
-                                self.mazeSolution(pathWidth)
-                                time.sleep(0.5)
+                                r = self.mazeSolution(pathWidth)
+                                if r:
+                                    running = False
+                                else:
+                                    time.sleep(1)
 
             pygame.display.update()
 
