@@ -24,7 +24,6 @@ O algoritmo é aplicado sobre o grafo abstraído do grid da tela. Nesse grafo, c
     - Visualização em etapas.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
 
 ### Tela Inicial
 ![Tela Inicial](./assets/media/initial_page.png)
